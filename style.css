@@ -1,0 +1,163 @@
+:root {
+  color-scheme: light;
+  --page: #f9f9f7;
+  --surface: #fcfcfb;
+  --ink: #0b0b0b;
+  --ink-2: #52514e;
+  --muted: #898781;
+  --grid: #e1e0d9;
+  --baseline: #c3c2b7;
+  --border: rgba(11, 11, 11, 0.10);
+  --series-a: #2a78d6;
+  --series-b: #1baf7a;
+  --series-r: #4a3aa7;
+  --up: #006300;
+  --down: #d03b3b;
+  --accent: #2a78d6;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --page: #0d0d0d;
+    --surface: #1a1a19;
+    --ink: #ffffff;
+    --ink-2: #c3c2b7;
+    --muted: #898781;
+    --grid: #2c2c2a;
+    --baseline: #383835;
+    --border: rgba(255, 255, 255, 0.10);
+    --series-a: #3987e5;
+    --series-b: #199e70;
+    --series-r: #9085e9;
+    --up: #0ca30c;
+    --down: #d03b3b;
+    --accent: #3987e5;
+  }
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--page);
+  color: var(--ink);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  -webkit-text-size-adjust: 100%;
+}
+
+.topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 16px 6px;
+}
+.topbar h1 { font-size: 17px; font-weight: 700; margin: 0; }
+.topbar-right { display: flex; align-items: center; gap: 8px; }
+.updated { font-size: 11px; color: var(--muted); }
+.icon-btn {
+  font-size: 18px; line-height: 1; padding: 8px; border: none; border-radius: 8px;
+  background: transparent; color: var(--ink-2); cursor: pointer;
+}
+
+main { padding: 0 12px 32px; max-width: 720px; margin: 0 auto; }
+
+.tabs {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+  padding: 4px; margin: 8px 0 12px;
+}
+.tab {
+  display: flex; flex-direction: column; align-items: center; gap: 1px;
+  padding: 7px 0 5px; border: none; border-radius: 9px; background: transparent;
+  color: var(--ink-2); cursor: pointer; font: inherit;
+}
+.tab span { font-size: 14px; font-weight: 600; }
+.tab small { font-size: 10px; color: var(--muted); }
+.tab[aria-selected="true"] { background: var(--accent); color: #fff; }
+.tab[aria-selected="true"] small { color: rgba(255, 255, 255, 0.85); }
+
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
+.stat {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+  padding: 10px 12px; min-width: 0;
+}
+.stat .label {
+  font-size: 11px; color: var(--ink-2); display: flex; align-items: center; gap: 5px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.stat .key { width: 12px; height: 3px; border-radius: 2px; flex: none; }
+.stat .value { font-size: 17px; font-weight: 650; margin-top: 3px; letter-spacing: -0.01em; }
+.stat .delta { font-size: 11px; margin-top: 2px; }
+.delta.up { color: var(--up); }
+.delta.down { color: var(--down); }
+.delta.flat { color: var(--muted); }
+
+.card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+  padding: 12px 12px 8px; margin-bottom: 12px;
+}
+.card-head {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 8px; margin-bottom: 4px; flex-wrap: wrap;
+}
+.card-head h2 { font-size: 13px; font-weight: 600; color: var(--ink-2); margin: 0; }
+.legend { display: flex; gap: 12px; font-size: 11px; color: var(--ink-2); }
+.legend .item { display: flex; align-items: center; gap: 5px; }
+.legend .key { width: 14px; height: 3px; border-radius: 2px; }
+
+.swap-btn {
+  font-size: 11px; padding: 5px 10px; border-radius: 8px; cursor: pointer;
+  border: 1px solid var(--border); background: transparent; color: var(--ink-2);
+}
+.swap-btn:active { background: var(--grid); }
+
+.chart { position: relative; height: 240px; }
+.chart-sm { height: 190px; }
+.chart svg { display: block; touch-action: pan-y; }
+
+.tooltip {
+  position: absolute; top: 6px; pointer-events: none; z-index: 5;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+  padding: 7px 10px; font-size: 11px; min-width: 130px;
+}
+.tooltip .tt-date { color: var(--muted); margin-bottom: 4px; }
+.tooltip .tt-row { display: flex; align-items: center; gap: 6px; margin-top: 2px; }
+.tooltip .tt-key { width: 10px; height: 3px; border-radius: 2px; flex: none; }
+.tooltip .tt-val { font-weight: 650; color: var(--ink); }
+.tooltip .tt-name { color: var(--ink-2); }
+
+.table-wrap {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+  padding: 10px 12px; margin-bottom: 12px; font-size: 12px;
+}
+.table-wrap summary { cursor: pointer; color: var(--ink-2); font-weight: 600; }
+.table-scroll { max-height: 320px; overflow: auto; margin-top: 8px; }
+table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+th, td { text-align: right; padding: 5px 6px; border-bottom: 1px solid var(--grid); white-space: nowrap; }
+th:first-child, td:first-child { text-align: left; }
+th { color: var(--muted); font-weight: 600; position: sticky; top: 0; background: var(--surface); }
+
+.message { text-align: center; color: var(--muted); padding: 48px 24px; font-size: 14px; }
+.message[hidden] { display: none; }
+.message.error { color: var(--down); }
+
+dialog {
+  border: 1px solid var(--border); border-radius: 16px; background: var(--surface);
+  color: var(--ink); width: min(92vw, 400px); padding: 18px;
+}
+dialog::backdrop { background: rgba(0, 0, 0, 0.45); }
+dialog h2 { margin: 0 0 12px; font-size: 16px; }
+dialog label { display: block; font-size: 12px; color: var(--ink-2); margin-bottom: 10px; }
+.sym-row { display: flex; gap: 6px; margin-top: 4px; }
+dialog select, dialog input {
+  width: 100%; padding: 9px 10px; font-size: 14px; border-radius: 9px;
+  border: 1px solid var(--border); background: var(--page); color: var(--ink);
+}
+.note { font-size: 11px; color: var(--muted); line-height: 1.5; }
+.note a { color: var(--accent); }
+.note code { background: var(--grid); padding: 1px 4px; border-radius: 4px; }
+.dialog-btns { display: flex; justify-content: flex-end; gap: 8px; margin-top: 14px; }
+.dialog-btns button {
+  padding: 9px 16px; font-size: 13px; border-radius: 9px; cursor: pointer;
+  border: 1px solid var(--border); background: transparent; color: var(--ink);
+}
+.dialog-btns #btn-save { background: var(--accent); color: #fff; border-color: transparent; }

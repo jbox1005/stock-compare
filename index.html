@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>주가 괴리율 비교</title>
+<meta name="description" content="두 종목의 종가와 괴리율을 일/주/월/년 단위로 비교">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="괴리율">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#f9f9f7">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0d0d0d">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <h1>주가 괴리율 비교</h1>
+  <div class="topbar-right">
+    <span id="updated" class="updated"></span>
+    <button id="btn-settings" class="icon-btn" type="button" aria-label="설정">⚙︎</button>
+  </div>
+</header>
+
+<main id="app" hidden>
+  <nav class="tabs" role="tablist" aria-label="조회 단위">
+    <button class="tab" data-period="day"  role="tab"><span>일</span><small>6개월</small></button>
+    <button class="tab" data-period="week" role="tab"><span>주</span><small>1년</small></button>
+    <button class="tab" data-period="month" role="tab"><span>월</span><small>3년</small></button>
+    <button class="tab" data-period="year" role="tab"><span>년</span><small>10년</small></button>
+  </nav>
+
+  <section class="stats" id="stats"></section>
+
+  <section class="card">
+    <div class="card-head">
+      <h2>종가 비교</h2>
+      <div class="legend" id="price-legend"></div>
+    </div>
+    <div class="chart" id="price-chart"></div>
+  </section>
+
+  <section class="card">
+    <div class="card-head">
+      <h2 id="ratio-title">괴리율</h2>
+      <button id="btn-swap" class="swap-btn" type="button">⇄ 분자·분모 교체</button>
+    </div>
+    <div class="chart chart-sm" id="ratio-chart"></div>
+  </section>
+
+  <details class="table-wrap">
+    <summary>표로 보기</summary>
+    <div class="table-scroll"><table id="data-table"></table></div>
+  </details>
+</main>
+
+<div id="message" class="message">데이터를 불러오는 중…</div>
+
+<dialog id="settings-dialog">
+  <form method="dialog" id="settings-form">
+    <h2>설정</h2>
+    <label>종목 A
+      <div class="sym-row"><select id="sel-a"></select><input id="inp-a" placeholder="종목코드 6자리" inputmode="numeric" maxlength="6" hidden></div>
+    </label>
+    <label>종목 B
+      <div class="sym-row"><select id="sel-b"></select><input id="inp-b" placeholder="종목코드 6자리" inputmode="numeric" maxlength="6" hidden></div>
+    </label>
+    <div id="new-symbol-note" class="note" hidden>
+      <p>새 종목은 저장소의 <code>symbols.json</code>에 추가되어야 데이터가 수집됩니다 (평일 16:20 자동 갱신).</p>
+      <p><a id="edit-link" href="#" target="_blank" rel="noopener">GitHub에서 직접 편집</a>하거나, 아래에 GitHub 토큰을 입력하면 자동으로 추가합니다.</p>
+      <label>GitHub 토큰 (repo 권한, 이 기기에만 저장)
+        <input id="inp-token" type="password" autocomplete="off" placeholder="ghp_…">
+      </label>
+    </div>
+    <p id="settings-status" class="note"></p>
+    <div class="dialog-btns">
+      <button value="cancel" type="button" id="btn-cancel">취소</button>
+      <button value="save" id="btn-save" type="submit">저장</button>
+    </div>
+  </form>
+</dialog>
+
+<script src="app.js"></script>
+</body>
+</html>
