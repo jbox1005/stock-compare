@@ -1,0 +1,41 @@
+name: Update stock data
+
+on:
+  schedule:
+    - cron: '20 7 * * 1-5'   # 평일 16:20 KST (07:20 UTC) — 장 마감 후
+  workflow_dispatch:
+  push:
+    paths:
+      - 'symbols.json'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-data
+  cancel-in-progress: true
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Fetch data from Naver Finance
+        run: node scripts/fetch-data.mjs
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/
+          if git diff --cached --quiet; then
+            echo "no changes"
+          else
+            git commit -m "data: update $(TZ=Asia/Seoul date +%F)"
+            git push
+          fi
